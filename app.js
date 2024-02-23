@@ -7,7 +7,10 @@ const toAccountInput = document.querySelector("#toAccount");
 const sendTrxButton = document.querySelector("#sendTrx");
 const amountInput = document.querySelector("#amount");
 
-const provider = new ethers.providers.JsonRpcProvider("HTTP://127.0.0.1:7545");
+//const provider = new ethers.providers.JsonRpcProvider("HTTP://127.0.0.1:7545");
+const provider = new ethers.providers.JsonRpcProvider(
+  "https://sepolia.infura.io/v3/114f4311bda64ce68544e7ab8efbc81e"
+);
 
 let account;
 let signer;
@@ -18,6 +21,7 @@ function initApp() {
 
 async function checkBalance() {
   account = accountInput.value;
+  console.log(await provider.getTransactionCount(account));
   const balance = await provider.getBalance(account);
   displayBalance.innerHTML = ethers.utils.formatEther(balance);
 }
@@ -30,6 +34,11 @@ async function sendTransaction() {
   });
 
   console.log(trx);
+}
+
+function displayHistory(transactions) {
+  for (let trx of transactions) console.log(trx);
+  console.log(trx.blockNumber);
 }
 
 document.addEventListener("DOMContentLoaded", initApp);
